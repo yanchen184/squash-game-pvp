@@ -178,29 +178,26 @@ class SquashGame {
         this.player2.draw(this.ctx);
         this.ball.draw(this.ctx);
         
-        // Draw court bounds last
+        // Draw court bounds last to ensure clean borders
         this.ui.drawCourtBounds(this.ctx, this.canvasWidth, this.canvasHeight);
     }
 
     // Main game loop
     gameLoop(currentTime = 0) {
-        // Calculate delta time
-        this.deltaTime = (currentTime - this.lastTime) / 16.67; // Normalize to 60fps
+        // Calculate delta time for smooth animation
+        this.deltaTime = Math.min((currentTime - this.lastTime) / 16.67, 2); // Cap at 2 to prevent large jumps
         this.lastTime = currentTime;
-        
-        // Limit delta time to prevent large jumps
-        this.deltaTime = Math.min(this.deltaTime, 2);
         
         // Update and render
         this.update(this.deltaTime);
         this.render();
         
-        // Continue loop
+        // Continue game loop
         requestAnimationFrame((time) => this.gameLoop(time));
     }
 }
 
 // Initialize game when page loads
-window.addEventListener('load', () => {
+document.addEventListener('DOMContentLoaded', () => {
     new SquashGame();
 });
